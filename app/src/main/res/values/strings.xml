@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">Mafia</string>
+    <string name="tagline">TRUST NO ONE. FIND THE TRUTH.</string>
+    <string name="create_room">CREATE ROOM</string>
+    <string name="join_room">JOIN ROOM</string>
+    <string name="settings">SETTINGS</string>
+    <string name="version">MAFIA • VERSION 1.0</string>
+</resources>

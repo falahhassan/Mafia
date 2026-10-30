@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">مافيا</string>
+    <string name="tagline">لا تثق بأحد. اكتشف الحقيقة.</string>
+    <string name="create_room">إنشاء غرفة</string>
+    <string name="join_room">الانضمام إلى غرفة</string>
+    <string name="settings">الإعدادات</string>
+    <string name="version">مافيا • الإصدار 1.0</string>
+</resources>
