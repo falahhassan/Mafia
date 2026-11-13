@@ -9,56 +9,64 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.fahlabs.mafia.core.localization.AppLanguage
 import com.fahlabs.mafia.core.localization.LanguageResources
-import com.fahlabs.mafia.core.localization.LocalAppLanguage
 import com.fahlabs.mafia.core.theme.MafiaTheme
+import com.fahlabs.mafia.core.theme.ThemeId
 import com.fahlabs.mafia.presentation.screens.HomeScreen
+import com.fahlabs.mafia.presentation.screens.SettingsScreen
 
 @Composable
-fun AppNavigation() {
-    var currentScreen by remember {
-        mutableStateOf(Screen.HOME)
-    }
+fun AppNavigation(
+    currentLanguage: AppLanguage,
+    onLanguageChange: (AppLanguage) -> Unit,
+    currentTheme: ThemeId,
+    onThemeChange: (ThemeId) -> Unit
+) {
+    val navController = rememberNavController()
 
-    val strings = LanguageResources.forLanguage(
-        LocalAppLanguage.current
-    )
+    val strings = LanguageResources.forLanguage(currentLanguage)
 
-    val colors = MafiaTheme.colors
-
-    when (currentScreen) {
-        Screen.HOME -> {
+    NavHost(
+        navController = navController,
+        startDestination = Screen.HOME.route,
+        modifier = Modifier.fillMaxSize()
+    ) {
+        composable(Screen.HOME.route) {
             HomeScreen(
                 onNewGame = {
-                    currentScreen = Screen.SETUP
+                    navController.navigate(Screen.SETUP.route)
                 },
                 onSettings = {
-                    currentScreen = Screen.SETTINGS
+                    navController.navigate(Screen.SETTINGS.route)
                 }
             )
         }
 
-        Screen.SETUP -> {
+        composable(Screen.SETUP.route) {
             PlaceholderScreen(
                 title = strings.newGame,
+                backText = strings.back,
                 onBack = {
-                    currentScreen = Screen.HOME
+                    navController.popBackStack()
                 }
             )
         }
 
-        Screen.SETTINGS -> {
-            PlaceholderScreen(
-                title = strings.settings,
+        composable(Screen.SETTINGS.route) {
+            SettingsScreen(
+                currentLanguage = currentLanguage,
+                onLanguageChange = onLanguageChange,
+                currentTheme = currentTheme,
+                onThemeChange = onThemeChange,
                 onBack = {
-                    currentScreen = Screen.HOME
+                    navController.popBackStack()
                 }
             )
         }
@@ -68,6 +76,7 @@ fun AppNavigation() {
 @Composable
 private fun PlaceholderScreen(
     title: String,
+    backText: String,
     onBack: () -> Unit
 ) {
     val colors = MafiaTheme.colors
@@ -86,7 +95,7 @@ private fun PlaceholderScreen(
         )
 
         Button(onClick = onBack) {
-            Text("←")
+            Text(backText)
         }
     }
 }
