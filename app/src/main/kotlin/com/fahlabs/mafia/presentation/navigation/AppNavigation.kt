@@ -21,6 +21,7 @@ import com.fahlabs.mafia.core.theme.MafiaTheme
 import com.fahlabs.mafia.core.theme.ThemeId
 import com.fahlabs.mafia.presentation.screens.HomeScreen
 import com.fahlabs.mafia.presentation.screens.SettingsScreen
+import com.fahlabs.mafia.presentation.screens.SetupScreen
 
 @Composable
 fun AppNavigation(
@@ -50,11 +51,12 @@ fun AppNavigation(
         }
 
         composable(Screen.SETUP.route) {
-            PlaceholderScreen(
-                title = strings.newGame,
-                backText = strings.back,
+            SetupScreen(
                 onBack = {
                     navController.popBackStack()
+                },
+                onContinue = { playerCount ->
+                    // We'll connect the player-name screen next.
                 }
             )
         }
@@ -83,9 +85,9 @@ private fun PlaceholderScreen(
 
     Column(
         modifier = Modifier
-            .fillMaxSize()
-            .background(colors.background)
-            .padding(24.dp),
+        .fillMaxSize()
+        .background(colors.background)
+        .padding(24.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {

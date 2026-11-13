@@ -12,7 +12,9 @@ data class LanguageResources(
     val midnight: String,
     val crimson: String,
     val emerald: String,
-    val vintage: String
+    val vintage: String,
+    val playerCount: String,
+    val continueText: String
 ) {
     companion object {
         fun forLanguage(language: AppLanguage): LanguageResources {
@@ -28,7 +30,9 @@ data class LanguageResources(
                     midnight = "Midnight",
                     crimson = "Crimson",
                     emerald = "Emerald",
-                    vintage = "Vintage"
+                    vintage = "Vintage",
+                    playerCount = "Number of Players",
+                    continueText = "Continue"
                 )
 
                 AppLanguage.ARABIC -> LanguageResources(
@@ -42,7 +46,9 @@ data class LanguageResources(
                     midnight = "منتصف الليل",
                     crimson = "قرمزي",
                     emerald = "زمردي",
-                    vintage = "كلاسيكي"
+                    vintage = "كلاسيكي",
+                    playerCount = "عدد اللاعبين",
+                    continueText = "متابعة"
                 )
             }
         }
