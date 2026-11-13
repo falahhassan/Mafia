@@ -1,4 +1,8 @@
+
 package com.fahlabs.mafia.presentation.navigation
 
-class Screen {
+enum class Screen {
+    HOME,
+    SETUP,
+    SETTINGS
 }
