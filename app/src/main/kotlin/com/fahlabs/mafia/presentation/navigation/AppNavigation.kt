@@ -22,6 +22,8 @@ import com.fahlabs.mafia.core.theme.ThemeId
 import com.fahlabs.mafia.presentation.screens.HomeScreen
 import com.fahlabs.mafia.presentation.screens.SettingsScreen
 import com.fahlabs.mafia.presentation.screens.SetupScreen
+import com.fahlabs.mafia.presentation.screens.PlayerNamesScreen
+
 
 @Composable
 fun AppNavigation(
@@ -56,7 +58,9 @@ fun AppNavigation(
                     navController.popBackStack()
                 },
                 onContinue = { playerCount ->
-                    // We'll connect the player-name screen next.
+                    navController.navigate(
+                        "${Screen.PLAYER_NAMES.route}/$playerCount"
+                    )
                 }
             )
         }
@@ -72,6 +76,22 @@ fun AppNavigation(
                 }
             )
         }
+        composable("${Screen.PLAYER_NAMES.route}/{playerCount}") { backStackEntry ->
+
+    val playerCount = backStackEntry.arguments
+        ?.getString("playerCount")
+        ?.toIntOrNull() ?: 6
+
+    PlayerNamesScreen(
+        playerCount = playerCount,
+        onBack = {
+            navController.popBackStack()
+        },
+        onContinue = { playerNames ->
+            // Next milestone: create the game using these names.
+        }
+    )
+}
     }
 }
 
