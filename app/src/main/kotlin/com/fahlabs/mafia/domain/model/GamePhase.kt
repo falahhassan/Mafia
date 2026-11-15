@@ -1,4 +1,10 @@
 package com.fahlabs.mafia.domain.model
 
-class GamePhase {
+enum class GamePhase {
+    ROLE_REVEAL,
+    NIGHT,
+    MORNING,
+    DISCUSSION,
+    VOTING,
+    FINISHED
 }

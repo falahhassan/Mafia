@@ -23,6 +23,13 @@ import com.fahlabs.mafia.presentation.screens.HomeScreen
 import com.fahlabs.mafia.presentation.screens.SettingsScreen
 import com.fahlabs.mafia.presentation.screens.SetupScreen
 import com.fahlabs.mafia.presentation.screens.PlayerNamesScreen
+import com.fahlabs.mafia.presentation.screens.RoleConfigScreen
+import com.fahlabs.mafia.domain.model.GameConfig
+import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.graphics.Color
+import com.fahlabs.mafia.domain.model.GameState
+import com.fahlabs.mafia.presentation.screens.RoleRevealScreen
+import androidx.compose.material3.CircularProgressIndicator
 
 
 @Composable
@@ -30,11 +37,12 @@ fun AppNavigation(
     currentLanguage: AppLanguage,
     onLanguageChange: (AppLanguage) -> Unit,
     currentTheme: ThemeId,
-    onThemeChange: (ThemeId) -> Unit
+    onThemeChange: (ThemeId) -> Unit,
+    onGameConfigCreated: (GameConfig) -> Unit,
+    currentGameState: GameState?
+
 ) {
     val navController = rememberNavController()
-
-    val strings = LanguageResources.forLanguage(currentLanguage)
 
     NavHost(
         navController = navController,
@@ -76,48 +84,81 @@ fun AppNavigation(
                 }
             )
         }
+        composable("${Screen.ROLE_CONFIG.route}/{playerCount}") { backStackEntry ->
+
+            val playerCount = backStackEntry.arguments
+            ?.getString("playerCount")
+            ?.toIntOrNull() ?: 6
+
+            RoleConfigScreen(
+                playerCount = playerCount,
+                onBack = {
+                    navController.popBackStack()
+                },
+                onContinue = { mafia, doctor, detective ->
+
+                    val playerNames = navController
+                    .previousBackStackEntry
+                    ?.savedStateHandle
+                    ?.get<ArrayList<String>>("playerNames")
+                    ?.toList()
+                    ?: emptyList()
+
+                    val gameConfig = GameConfig(
+                        playerNames = playerNames,
+                        mafiaCount = mafia,
+                        doctorCount = doctor,
+                        detectiveCount = detective
+                    )
+
+                    onGameConfigCreated(gameConfig)
+                    navController.navigate(Screen.ROLE_REVEAL.route)
+                }
+            )
+        }
+        composable(Screen.ROLE_REVEAL.route) {
+
+            if (currentGameState != null) {
+
+                RoleRevealScreen(
+                    gameState = currentGameState
+                )
+
+            } else {
+
+                Box(
+                    modifier = Modifier
+                    .fillMaxSize()
+                    .background(MafiaTheme.colors.background),
+                    contentAlignment = Alignment.Center
+                ) {
+                    CircularProgressIndicator(
+                        color = MafiaTheme.colors.primary
+                    )
+                }
+            }
+        }
         composable("${Screen.PLAYER_NAMES.route}/{playerCount}") { backStackEntry ->
 
-    val playerCount = backStackEntry.arguments
-        ?.getString("playerCount")
-        ?.toIntOrNull() ?: 6
+            val playerCount = backStackEntry.arguments
+            ?.getString("playerCount")
+            ?.toIntOrNull() ?: 6
 
-    PlayerNamesScreen(
-        playerCount = playerCount,
-        onBack = {
-            navController.popBackStack()
-        },
-        onContinue = { playerNames ->
-            // Next milestone: create the game using these names.
-        }
-    )
-}
-    }
-}
+            PlayerNamesScreen(
+                playerCount = playerCount,
+                onBack = {
+                    navController.popBackStack()
+                },
+                onContinue = { playerNames ->
+                    navController.currentBackStackEntry
+                    ?.savedStateHandle
+                    ?.set("playerNames", ArrayList(playerNames))
 
-@Composable
-private fun PlaceholderScreen(
-    title: String,
-    backText: String,
-    onBack: () -> Unit
-) {
-    val colors = MafiaTheme.colors
-
-    Column(
-        modifier = Modifier
-        .fillMaxSize()
-        .background(colors.background)
-        .padding(24.dp),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
-    ) {
-        Text(
-            text = title,
-            color = colors.textPrimary
-        )
-
-        Button(onClick = onBack) {
-            Text(backText)
+                    navController.navigate(
+                        "${Screen.ROLE_CONFIG.route}/$playerCount"
+                    )
+                }
+            )
         }
     }
 }

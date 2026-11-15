@@ -18,6 +18,11 @@ import com.fahlabs.mafia.core.localization.AppLanguage
 import com.fahlabs.mafia.core.theme.ThemeId
 import com.fahlabs.mafia.presentation.navigation.AppNavigation
 import kotlinx.coroutines.launch
+import com.fahlabs.mafia.domain.model.GameState
+import com.fahlabs.mafia.domain.engine.GameEngine
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 
 class MainActivity : ComponentActivity() {
 
@@ -26,13 +31,17 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
 
         setContent {
+
             val context = LocalContext.current
             val scope = rememberCoroutineScope()
 
             val settings by SettingsStorage.settingsFlow(context)
-                .collectAsState(
-                    initial = com.fahlabs.mafia.core.common.AppSettings()
-                )
+            .collectAsState(
+                initial = com.fahlabs.mafia.core.common.AppSettings()
+            )
+            var currentGameState by remember {
+                mutableStateOf<GameState?>(null)
+            }
 
             MafiaAppProviders(
                 language = settings.language,
@@ -59,7 +68,11 @@ class MainActivity : ComponentActivity() {
                                     theme
                                 )
                             }
-                        }
+                        },
+                        onGameConfigCreated = { config ->
+                            currentGameState = GameEngine.startGame(config)
+                        },
+                        currentGameState = currentGameState
                     )
                 }
             }

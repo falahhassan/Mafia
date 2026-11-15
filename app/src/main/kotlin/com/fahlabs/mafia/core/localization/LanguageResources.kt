@@ -18,7 +18,17 @@ data class LanguageResources(
     val playerNames: String,
     val playerLabel: String,
     val nameHint: String,
-    val startGame: String
+    val startGame: String,
+    val roleConfiguration: String,
+    val mafiaRole: String,
+    val doctorRole: String,
+    val detectiveRole: String,
+    val villagerRole: String,
+    val passDevice: String,
+    val showRole: String,
+    val hideRole: String,
+    val allRolesRevealed: String,
+    val roleRevealComplete: String
 ) {
     companion object {
         fun forLanguage(language: AppLanguage): LanguageResources {
@@ -40,7 +50,17 @@ data class LanguageResources(
                     playerNames = "Player Names",
                     playerLabel = "Player",
                     nameHint = "Enter player name",
-                    startGame = "Start Game"
+                    startGame = "Start Game",
+                    roleConfiguration = "Role Configuration",
+                    mafiaRole = "Mafia",
+                    doctorRole = "Doctor",
+                    detectiveRole = "Detective",
+                    villagerRole = "Villagers",
+                    passDevice = "Pass the device to",
+                    showRole = "Show My Role",
+                    hideRole = "Hide Role & Continue",
+                    allRolesRevealed = "All Roles Revealed",
+                    roleRevealComplete = "Everyone has seen their role. The game is ready!"
                 )
 
                 AppLanguage.ARABIC -> LanguageResources(
@@ -60,7 +80,17 @@ data class LanguageResources(
                     playerNames = "أسماء اللاعبين",
                     playerLabel = "اللاعب",
                     nameHint = "أدخل اسم اللاعب",
-                    startGame = "ابدأ اللعبة"
+                    startGame = "ابدأ اللعبة",
+                    roleConfiguration = "إعداد الأدوار",
+                    mafiaRole = "المافيا",
+                    doctorRole = "الطبيب",
+                    detectiveRole = "المحقق",
+                    villagerRole = "القرويون",
+                    passDevice = "مرر الجهاز إلى",
+                    showRole = "اكشف دوري",
+                    hideRole = "إخفاء الدور والمتابعة",
+                    allRolesRevealed = "تم كشف جميع الأدوار",
+                    roleRevealComplete = "لقد رأى الجميع أدوارهم. اللعبة جاهزة!"
                 )
             }
         }
